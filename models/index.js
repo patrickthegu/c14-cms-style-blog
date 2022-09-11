@@ -7,8 +7,6 @@ User.hasMany(Post, {
     foreignKey: 'user_id',
 });
 
-
-
 // Users can make many comments
 User.hasMany(Comment, {
     foreignKey: 'user_id'
