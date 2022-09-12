@@ -25,35 +25,40 @@ router.get('/', (req, res) => {
     })
 })
 
-// get comments from one user
-router.get('/:id', (req, res) =>{
-    User.findOne({
-        where: {
-            id: req.params.id
-        },
-        attributes: ["id"],
-        include: [
-            {
-                model: 
-            }
-        ]
-    })
-})
-
 // Create new comment
 router.post('/', withAuth, (req, res) => {
     if (req.session) {
         Comment.create({
             coment_text: req.body.comment_text,
-            post_id: req.session.post_id,
+            post_id: req.body.post_id,
             user_id: req.session.user_id
+        })
+        .then(newCommentData => res.json(newCommentData))
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
         })
     }
 })
 
 // Delete comment
 router.delete('/:id', withAuth, (req, res) => {
-    if 
-})
+    Comment.destroy({
+        where: {
+            id: req.params.id
+        }
+    })
+    .then(deleteCommentData => {
+        if (!deleteCommentData) {
+            res.status(404).json({message: 'No comment found with this id to delete'});
+            return;
+        }
+        res.json(deleteCommentData);
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+});
 
 module.exports = router;
