@@ -26,7 +26,7 @@ router.get('/', withAuth, (req, res) => {
         ]
     })
     .then(postData => {
-        const posts = postData.maps(post => post.get({ plain: true }));
+        const posts = postData.map(post => post.get({ plain: true }));
         res.render('dashboard', { posts, logged_in: true })
     })
     .catch(err => {
@@ -41,7 +41,7 @@ router.get('/newpost', (req, res) => {
 });
 
 // Render edit post page
-router.get('/edit/:id', withAuth, (req, res) => {
+router.get('/post-edit/:id', withAuth, (req, res) => {
     Post.findOne({
         where: {
             id: req.params.id
